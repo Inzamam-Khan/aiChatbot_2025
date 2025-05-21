@@ -6,7 +6,7 @@ import UsersList from './UsersList';
 export default function SearchComponent({isOpen,setIsOpen}) {
   
   return (
-    <div className={`border border-green-500  h-[79.5vh] hidden
+    <div className={` border-green-500  h-[79.5vh] hidden
     sm:flex flex-col space-y-2  px-2 w-full bg-gray-100 z-10 items-center justify-start 
     transform transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0

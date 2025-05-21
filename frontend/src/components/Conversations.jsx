@@ -1,24 +1,27 @@
 import React from 'react'
 import { FiSend } from "react-icons/fi";
 import { MdPermMedia } from "react-icons/md";
+import { BsThreeDots } from "react-icons/bs";
+import { LuMoonStar } from "react-icons/lu";
+import { FaEnvelopeOpenText } from "react-icons/fa6";
 function Conversations() {
   
   let isSender=true
   return (
-    <div className='flex flex-col  items-center  border-red-500 h-full'>
+    <div className='flex flex-col  h-full  items-center  border-red-500'>
        
        
        {/* header part */}
        <div className="min-h-10 border-b-3 border-purple-300  w-full px-2 py-1 font-semibold text-xl flex items-center justify-between">
   <div className="font-semibold text-xl">John Doe</div>
-  <div className="flex items-center border gap-4 justify-center">
-    <button>one </button>
-     <button>wow</button>
-     <button>threes</button>
+  <div className="flex items-center  gap-4 justify-center">
+    <button className=' bg-gray-200 rounded-lg p-1 '><BsThreeDots/> </button>
+     <button className=' bg-gray-200 rounded-lg p-1 '><LuMoonStar fill="black"/></button>
+     <button className='rounded-lg px-3 font-normal text-white bg-black py-1 flex items-center text-sm gap-2'><FaEnvelopeOpenText /> Close</button>
   </div>
 </div>
 
-<div className=" w-full h-[70vh] overflow-auto"
+<div className=" w-full h-[70vh]  overflow-auto"
 >
     
       <div
@@ -85,15 +88,9 @@ function Conversations() {
     </div>
 
 
-
-    
-        
-     
-   
-
 {/* input box part footer */}
-<div className="flex items-center justify-between
- border-blue-500 w-full h-9 gap-2 mt-auto mb-1 px-2">
+<div className="flex  items-center justify-between 
+ border-blue-500 w-full h-9 gap-2 mt-auto  mb-2 px-2">
 
   {/* input box */}
   <div className="h-full w-full">

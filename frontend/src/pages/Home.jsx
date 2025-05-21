@@ -5,7 +5,7 @@ import Aibot from '../components/Aibot'
 
 export function Home() {
   return (
-    <div className='border bg-purple-300 border-blue-500 w-full h-[100vh]  px-40 py-10 overflow-hidden'>
+    <div className=' bg-purple-300 border-blue-500 w-full h-[100vh]  px-40 py-10 overflow-hidden'>
     
     
        <div className=" rounded-lg bg-neutral-100 border-green-500 
@@ -27,7 +27,7 @@ right div
 
 
   <div className=" border-red-500 
-      w-full h-full grid grid-cols-10 justify-center">
+      w-full h-full  grid grid-cols-10 justify-center">
 
 
 <div className=' col-span-3'><Sidebar/></div>
