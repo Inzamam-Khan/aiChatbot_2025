@@ -1,58 +1,58 @@
 
 
 
-// export const ShowDetailsComponent=()=>{
-// return(
-// <div className="w-full  h-full bg-white shadow-xl p-4 
-// space-y-6 text-sm text-gray-800">
-//   <div className=" flex flex-col space-y-2">
-//     <div className="flex justify-between items-center">
-//       <span className="font-semibold">Assignee</span>
-//       <span className="text-gray-600">Brian Byrne</span>
-//     </div>
-//     <div className="flex justify-between items-center">
-//       <span className="font-semibold">Team</span>
-//       <span className="text-gray-600 italic">Unassigned</span>
-//     </div>
-//   </div>
+export const ShowDetailsComponent=()=>{
+return(
+<div className="w-full  h-full bg-white shadow-xl p-4 
+space-y-6 text-sm text-gray-800">
+  <div className=" flex flex-col space-y-2">
+    <div className="flex justify-between items-center">
+      <span className="font-semibold">Assignee</span>
+      <span className="text-gray-600">Brian Byrne</span>
+    </div>
+    <div className="flex justify-between items-center">
+      <span className="font-semibold">Team</span>
+      <span className="text-gray-600 italic">Unassigned</span>
+    </div>
+  </div>
 
-//   <div className="space-y-2">
-//     <h2 className="text-gray-700 font-semibold uppercase text-xs">Links</h2>
-//     {[
-//       { name: "Tracker ticket", icon: "ticket" },
-//       { name: "Back-office tickets", icon: "archive" },
-//       { name: "Side conversations", icon: "arrow-right" }
-//     ].map((link, idx) => (
-//       <div key={idx} className="flex items-center justify-between hover:bg-gray-50 p-2 rounded-md cursor-pointer">
-//         <span className="flex items-center space-x-2">
-//           <i className={`lucide-${link.icon} w-4 h-4`} />
-//           <span>{link.name}</span>
-//         </span>
-//         <button className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">+</button>
-//      </div>
-//     ))}
-//   </div>
+  <div className="space-y-2">
+    <h2 className="text-gray-700 font-semibold uppercase text-xs">Links</h2>
+   {[
+       { name: "Tracker ticket", icon: "ticket" },
+       { name: "Back-office tickets", icon: "archive" },
+       { name: "Side conversations", icon: "arrow-right" }
+    ].map((link, idx) => (
+       <div key={idx} className="flex items-center justify-between hover:bg-gray-50 p-2 rounded-md cursor-pointer">
+        <span className="flex items-center space-x-2">
+          <i className={`lucide-${link.icon} w-4 h-4`} />
+          <span>{link.name}</span>
+        </span>
+        <button className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full">+</button>
+     </div>
+    ))}
+  </div>
 
-//   <div className="divide-y divide-gray-200">
-//     {[ 
-//       "User Data",
-//       "Conversation Attributes",
-//       "Company Details",
-//       "Salesforce",
-//       "Stripe",
-//       "Jira for Tickets"
-//     ].map((section, index) => (
-//       <details key={index} className="py-2">
-//         <summary className="font-medium cursor-pointer">{section}</summary>
-//          <div className="mt-2 text-gray-600 text-xs">
-//            {/* You can dynamically load content here */}
-//            Content goes here...
-//         </div>
-//       </details>
-//     ))}
-//   </div>
-// </div>
-//   )}
+  <div className="divide-y divide-gray-200">
+    {[ 
+      "User Data",
+      "Conversation Attributes",
+      "Company Details",
+      "Salesforce",
+      "Stripe",
+      "Jira for Tickets"
+    ].map((section, index) => (
+   <details key={index} className="py-2">
+         <summary className="font-medium cursor-pointer">{section}</summary>
+          <div className="mt-2 text-gray-600 text-xs">
+       {/* You can dynamically load content here */}
+         Content goes here...
+       </div>
+      </details>
+    ))}
+  </div>
+</div>
+)}
 
 
 
@@ -83,7 +83,7 @@ const API_KEY = 'AIzaSyATNXCn8qgz-8MVLMVL5Ahw1NVLqYrxAE4';
   const selectedChat = useSelector(state => state.selectedUser);
   const [showDetails, setShowDetails] = useState(false);
   const isSender = true;
-  const isChatStarted = true; // Assume true for demo
+  
   const inputRef = useRef(null);
 
   const [aiChats, setAiChats]=useState([])
@@ -95,9 +95,11 @@ const API_KEY = 'AIzaSyATNXCn8qgz-8MVLMVL5Ahw1NVLqYrxAE4';
   const [selectedText, setSelectedText] = useState('')
   const [loading,setLoading]=useState(false)
   const [aiResponse, setAiResponse] = useState('');
+  const[isChatStarted,setIsChatStarted]=useState(false)
 
 
 const askAI = async (prompt) => {
+  setIsChatStarted(true)
     setLoading(true)
     try {
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
@@ -112,9 +114,11 @@ const askAI = async (prompt) => {
         generatedText.map(part => part?.text || '').join('\n') : 
        'No response received.'; 
        setAiResponse(responseText);
-      //  setAiChats(prev=>[...prev,responseText])
+       setAiChats(prev=>[...prev,data])
     } catch (error)
-     { console.error('Error fetching AI response:', error); 
+     { 
+      setAiChats(prev=>[...prev,inputRef.current.value]);
+      console.error('Error fetching AI response:', error); 
     } finally {
       setLoading(false)
   
@@ -139,7 +143,7 @@ const askAI = async (prompt) => {
   document.addEventListener('click', handleMouseUp);
   return () => document.removeEventListener('click', handleMouseUp);
 }, [])
-
+console.log(aiChats)
 
 
   return (
@@ -162,22 +166,57 @@ const askAI = async (prompt) => {
           <FiSidebar size={16} />
         </div>
       </div>
-
+{/* ---------------------------------------------------------------------------------------------------------- */}
       {/* Main Body */}
       <AnimatePresence mode="wait">
         {/* Chat View */}
         {!showDetails && isChatStarted && (
           
 
-              <div className="w-full h-[70vh] overflow-auto px-2 mt-2">
+              <div className="w-full h-[78vh]   overflow-auto px-2 mt-2">
           {/* Existing chat messages */}
-          {aiChats.map((message, index) => (
-             <div className="flex items-start gap-1 justify-end max-w-[320px] px-1 my-3">
-            <div className="flex flex-col leading-relaxed p-4 bg-blue-500 text-white rounded-xl">
-              <p className="text-sm font-normal">{message}</p>
+          {aiChats.map((message, index) => {
+  const isAI = message.candidates?.[0]?.content?.role === 'model';
+  const aiText = message.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const userText = message.text;
+  const timestamp = message.timestamp;
+
+  return (
+    <div key={index}>
+      {isAI ? (
+        // AI Message
+        <div className="mt-4 max-w-[320px] p-4 bg-green-100 text-gray-900 rounded-xl">
+          <strong>AI Response:</strong>
+          <p className="text-sm mt-1">{aiText}</p>
+        </div>
+      ) : (
+        // User Message
+        <div className="flex items-start gap-2 mt-2 px-2 w-full justify-end">
+          <div className="flex flex-col gap-1 w-full max-w-[320px] items-end">
+            {/* Name & Time */}
+            <div className="flex items-center gap-2 text-black flex-row-reverse">
+              <span className="text-sm font-semibold">You</span>
+              <span className="text-xs font-normal">{timestamp}</span>
+            </div>
+
+            {/* Message Bubble */}
+            <div className="flex flex-col leading-relaxed p-4 w-full bg-blue-500 text-white rounded-s-xl rounded-ee-xl">
+              <p className="text-sm text-end">{userText}</p>
             </div>
           </div>
-          ))}
+
+          {/* Avatar */}
+          <img
+            className="w-8 h-8 rounded-full"
+            src="https://ui-avatars.com/api/?name=You"
+            alt="Your avatar"
+          />
+        </div>
+      )}
+    </div>
+  );
+})}
+
          
 {loading && (
   <div className="space-y-4 mt-4">
@@ -186,14 +225,10 @@ const askAI = async (prompt) => {
     <div className="h-4 bg-gray-300 rounded w-5/6 animate-pulse"></div>
     <div className="h-4 bg-gray-300 rounded w-2/3 animate-pulse"></div>
   </div>
-)   }     
- {/* AI Response display */}
-          {aiResponse && (
-            <div className="mt-4 max-w-[320px] p-4 bg-green-100 text-gray-900 rounded-xl">
-              <strong>AI Response:</strong>
-              <p>{aiResponse}</p>
-            </div>
-          )}
+)   }   
+
+
+
         </div>
         )}
 
@@ -232,11 +267,12 @@ const askAI = async (prompt) => {
                 className="outline-none border border-gray-400 w-full h-full px-2 rounded"
               />
             </div>
+            {/* ------------------------------------------------------------------------------------------ */}
             <div className="flex justify-center text-sm items-center gap-1">
               <button className='cursor-pointer p-2 rounded bg-gray-800 text-white'><MdPermMedia /></button>
               <button
               onClick={()=>{
-                setAiChats(prev=>[...prev,inputRef.current.value]);
+                setAiChats(prev=>[...prev,{text:inputRef.current.value,timestamp:new Date().toLocaleString()}]);
                 askAI(inputRef.current.value);
                 inputRef.current.value=""}
               }
@@ -287,7 +323,7 @@ const askAI = async (prompt) => {
           }}
           onMouseLeave={() => setShowTooltip(false)} // hide tooltip if mouse leaves
         >
-          Ask AI
+          Ask Fin Copilot
         </div>
       )}
 

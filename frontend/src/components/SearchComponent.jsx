@@ -12,7 +12,7 @@ export default function SearchComponent({isOpen,setIsOpen}) {
    const usersList= users?.filter(user=>user?.id !==authUser?.id)
    const [filteredUsers, setFilteredUsers] = useState([]);
   const debounceTimeout = useRef(null);
-console.log(users)
+
    const handleSearch = (searchText) => {
     if (!searchText) {
       setFilteredUsers(usersList);

@@ -15,6 +15,7 @@ import { removeSelectedChat } from '../store/actions';
 function Conversations() {
 const dispatch=useDispatch()
   const [allMessageArray, setAllMessageArray] = useState([]);
+  const [isOpen,setIsOpen]=useState(false)
   const messageRef = useRef("")
   const selectedChat = useSelector(state => state.selectedUser)
   const authUser = useSelector(state => state.authUser)
@@ -54,14 +55,17 @@ const dispatch=useDispatch()
 
 
   return (<>
-  {selectedChat? <div className='flex  flex-col overflow-hidden h-full   items-center  border-red-500 '>
+  {selectedChat? 
+  <div className='flex  flex-col overflow-hidden h-full   items-center  border-red-500 '>
 
 
       {/* header part */}
       <div className="min-h-10 border-b-3 border-purple-300  w-full px-2 py-1 font-semibold text-xl flex items-center justify-between">
         <div className="font-semibold text-xl">{selectedChat?.firstName} {selectedChat?.lastName}</div>
         <div className="flex items-center  gap-4 justify-center">
-          <button className='cursor-pointer bg-gray-200 rounded-lg p-1 '><BsThreeDots /> </button>
+          <button 
+          onClick={()=>setIsOpen(true)}
+          className='cursor-pointer bg-gray-200 rounded-lg p-1 '><BsThreeDots /> </button>
           <button className=' bg-gray-200  cursor-pointer rounded-lg p-1 '><LuMoonStar fill="black" /></button>
           <button 
           onClick={()=>dispatch(removeSelectedChat())}
@@ -69,11 +73,15 @@ const dispatch=useDispatch()
         </div>
       </div>
 
+
+{/* messageComponent */}
       <div className="   w-full h-[70vh]  overflow-auto"
       >
         {
           allMessageArray.map((message) => <MessageComponent {...message} />)
         }
+
+        <CommandPalette isOpen={isOpen} setIsOpen={setIsOpen}/>
 
 
 
@@ -202,4 +210,100 @@ export const MessageComponent = ({ ...message }) => {
       </div></>
   )
 
+}
+
+
+
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Search, StickyNote, RefreshCcw, MessageSquare,
+  Ticket, BellOff, Upload, Image, X
+} from 'lucide-react';
+
+const actions = [
+  { label: "Write a note", shortcut: "N", icon: <StickyNote size={18} /> },
+  { label: "Use macro", shortcut: "\\", icon: <RefreshCcw size={18} /> },
+  { label: "Summarize conversation", shortcut: "Y", icon: <MessageSquare size={18} /> },
+  { label: "Create a back-office ticket", shortcut: "Z", icon: <Ticket size={18} /> },
+  { label: "Snooze", shortcut: "S", icon: <BellOff size={18} /> },
+  { label: "Upload attachment", shortcut: "U", icon: <Upload size={18} /> },
+  { label: "Insert gif", shortcut: "G", icon: <Image size={18} /> },
+];
+
+export function CommandPalette({ isOpen ,setIsOpen}) {
+  const [search, setSearch] = useState('');
+
+  const filtered = actions.filter(action =>
+    action.label.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: -10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className="fixed top-20 left-1/2 transform -translate-x-1/2 w-full max-w-lg z-50"
+        >
+          <div className="bg-white  text-zinc-900    rounded-xl shadow-xl relative">
+            
+            {/* Close Button */}
+            <button
+              onClick={()=>setIsOpen(false)}
+              className="absolute top-2 right-3 p-1 rounded bg-zinc-900  hover:bg-zinc-700 transition"
+              aria-label="Close"
+            >
+              <X size={18} className="text-zinc-300 " />
+            </button>
+
+            {/* Search Input */}
+            <div className="flex items-center px-4 py-2 border-b dark:border-zinc-700">
+              <Search className="text-gray-400 dark:text-zinc-500 mr-2" size={18} />
+              <input
+                type="text"
+                placeholder="Search actions"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-transparent outline-none text-sm placeholder-gray-400 dark:placeholder-zinc-500"
+              />
+            </div>
+
+            {/* Action List */}
+            <ul className="max-h-80 overflow-y-auto">
+              {filtered.map((action, index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-between px-4 py-2 hover:bg-purple-300  cursor-pointer transition"
+                >
+                  <div className="flex items-center gap-2 text-sm">
+                    {action.icon}
+                    {action.label}
+                  </div>
+                  <kbd className="text-xs text-zinc-900  border  px-2 py-0.5 rounded">
+                    {action.shortcut}
+                  </kbd>
+                </li>
+              ))}
+              {filtered.length === 0 && (
+                <li className="text-center text-sm text-gray-400 dark:text-zinc-500 py-4">
+                  No results found
+                </li>
+              )}
+            </ul>
+
+            {/* Footer */}
+            <div className="flex justify-between items-center text-xs 
+            text-gray-300 px-4 py-2 rounded-es-xl rounded-ee-xl
+             bg-gray-800 ">
+              <span>↑↓ to navigate</span>
+              <span>↵ to select</span>
+              <span>Esc to close</span>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 }
