@@ -10,7 +10,7 @@ function UsersList({...user}) {
   
   return (
     <div key={id} onClick={()=>dispatch(setSelectedChat(user))}
-     className={`border rounded-lg  border-gray-300 px-2 cursor-pointer hover:bg-gray-200 ${isSelected? `bg-purple-300`:``}`}>
+     className={`border rounded-lg  border-gray-300 px-2 cursor-pointer  hover:bg-gray-200 ${isSelected? `bg-purple-300`:``}`}>
       <div className="flex items-center justify-around gap-4 ">
         {/* user image */}
         <div className=" rounded-full w-10 min-w-10 h-10 flex items-center justify-center bg-gray-300 overflow-hidden">
